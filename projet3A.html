@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expérience de conduite</title>
+    <style>
+       body {
+ 
+	
+      padding: 0;
+      box-sizing: border-box;
+      margin:0;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      min-height: 100vh;
+      background-color: #708090;
+	  background-repeat: no-repeat;
+	  background-size: cover
+	   
+    }
+
+
+	h1{ 
+		color : white;
+	}
+
+    p{
+		color : white;
+	}
+
+
+    header {
+   background-image: url(https://www.bresser.de/out/pictures/generated/product/2/640_640_70/3e85e4e2a5f7f2c4aa83bcc82e7f3449_f004042_m_1_1.jpg);
+     background-size: cover;
+     padding: 10px;
+     text-align: center;
+    }
+    
+    footer {
+	 background-image: url(https://www.bresser.de/out/pictures/generated/product/2/640_640_70/3e85e4e2a5f7f2c4aa83bcc82e7f3449_f004042_m_1_1.jpg);
+     background-size: cover;
+     padding: 10px;
+     text-align: center;
+    }
+
+	 main {
+	  padding: 20px;
+	  max-width: 600px;
+	  margin: 0 ; 
+	  display: grid;
+	  gap: 20px;
+	  color: white;
+	}
+
+	form {
+	  display: grid;
+	  gap: 15px;
+	  margin: 0 50px; 
+	  
+	}
+
+    label {
+      display: block;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-image: url(https://www.bresser.de/out/pictures/generated/product/2/640_640_70/3e85e4e2a5f7f2c4aa83bcc82e7f3449_f004042_m_1_1.jpg);;
+      color: white;
+      border:none;      
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+   
+
+    @media screen and (min-width: 600px) {
+      form {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    </style>
+    <script>
+       
+function getExperiences() {
+        
+        const storedExperiences = localStorage.getItem("experiences");
+        return storedExperiences ? JSON.parse(storedExperiences) : [];
+    }
+       function populateSelects() {
+    populateDropdown("meteo", meteo);
+    populateDropdown("traffic", traffic);
+    populateDropdown("permis", permis);
+    populateDropdown("themeTravailler", themeTravailler);
+}
+
+        function populateDropdown(selectId, options) {
+    var select = document.getElementById(selectId);
+
+    options.forEach(option => {
+        var optionElement = document.createElement("option");
+        optionElement.value = option.id;
+        optionElement.text = option.label;
+        select.appendChild(optionElement);
+    });
+}
+
+        function saveExperience() {
+    console.log("Function saveExperience called");
+    const experiences = getExperiences();
+    console.log("Experiences:", experiences);
+
+
+         const newExperience = {
+            id: experiences.length > 0 ? experiences[experiences.length - 1].id + 1 : 1,
+            date: document.getElementById("date").value,
+            heureDebut: document.getElementById("heureDebut").value,
+            heureFin: document.getElementById("heureFin").value,
+            kmParcouru: document.getElementById("kmParcouru").value,
+            temperature: document.getElementById("temperature").value,
+            meteo: document.getElementById("meteo").value,
+            traffic: document.getElementById("traffic").value,
+            permis: document.getElementById("permis").value,
+            themeTravailler: document.getElementById("themeTravailler").value,
+        };
+
+        experiences.push(newExperience);
+        localStorage.setItem("experiences", JSON.stringify(experiences));
+		
+    console.log("New experience:", newExperience);
+
+
+        
+        document.getElementById("experienceForm").reset();
+    }
+
+    document.onreadystatechange = function () {
+        if (document.readyState == 'complete') {
+            populateSelects();
+        }
+    };
+    </script>
+</head>
+
+<body>
+    <header>
+        <h1>Éxpérience de conduite</h1>
+    </header>
+
+    <main>
+        <form id="experienceForm" onsubmit="event.preventDefault(); saveExperience();">
+           		
+	  <label for="date">Date :</label>
+      <input type="date" id="date" name="date" required>
+		
+      <label for="heureDebut">Heure de début :</label>
+      <input type="time" id="heureDebut" name="heureDebut" required> 
+
+      <label for="heureFin">Heure de fin :</label>
+      <input type="time" id="heureFin" name="heureFin" required>
+      
+
+
+      <label for="kmParcouru">Kilométrage parcouru :</label>
+      <input type="number" id="kmParcouru" name="kmParcouru" required>
+
+     
+      <label for="temperature">Température (°C) :</label>
+      <input type="number" id="temperature" name="temperature" required>
+
+      <label for="meteo">Météo :</label>
+      <select id="meteo" name="meteo" required>
+        <option value="Pluvieux">Pluvieux</option>
+        <option value="Ensoleillé">Ensoleillé</option>
+        <option value="Verglas">Verglas</option>
+        <option value="Venteux">Venteux</option>
+        <option value="Neigeux">Neigeux</option>
+        <option value="Brumeux">Brumeux</option>
+        <option value="Orageux">Orageux</option>
+      
+      
+      </select>
+
+      <label for="traffic">Trafic :</label>
+      <select id="traffic" name="traffic" required>
+        <option value="fluide">Fluide</option>
+        <option value="dense">Dense</option>
+        <option value="embouteille">Embouteillé</option>
+      </select>
+
+      <label for="permis">Type de permis :</label>
+      <select id="permis" name="permis" required>
+        <option value="auto">Auto</option>
+        <option value="moto">Moto</option>
+        <option value="cyclomoteur">Cyclomoteur</option>
+        <option value="professionnel">Professionnel</option>
+        <option value="remorque">Remorque</option>
+      </select>
+
+      <label for="themeTravailler">Thème de travail :</label>
+      <select id="themeTravailler" name="themeTravailler" required>
+        <option value="MaitriseVehicule">Maîtrise du véhicule</option>
+        <option value="SePositionnerSurLaChausse">Se positionner sur la chaussée</option>
+        <option value="CirculationAgglomeration">Circulation en agglomération</option>
+        <option value="CirculationAutoroute">Circulation sur autoroute</option>
+   
+      </select>
+
+      <button type="submit">Enregistrer</button>
+
+        </form>
+    </main>
+
+    <footer>
+        <p><a href="bilan.html" target="lien">Voir le bilan des expériences de conduite</a></p>
+        <p> Unver Uzeyir. Tous droits réservés.</p>
+    </footer>
+</body>
+
+</html>
