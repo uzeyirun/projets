@@ -1,0 +1,165 @@
+<!-- bilan.html -->
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bilan des expériences de conduite</title>
+    <style>
+      body {
+    background-color: #708090;
+    color: white;
+    font-family: Arial, sans-serif;
+    margin: 0;
+	}
+
+			header {
+		background-image: url(https://www.bresser.de/out/pictures/generated/product/2/640_640_70/3e85e4e2a5f7f2c4aa83bcc82e7f3449_f004042_m_1_1.jpg);
+		background-size: cover;
+		padding: 10px;
+		text-align: center;
+		margin-bottom: 20px; 
+	}
+
+		   main {
+		max-width: 800px;
+		margin: 20px auto;
+		padding: 20px;
+		margin-bottom: 50px; 
+	}
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border: 1px solid white;
+        }
+
+       
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+             background-color: #333;
+             border: 1px solid white;
+        }
+
+       
+
+       footer {
+		background-image: url(https://www.bresser.de/out/pictures/generated/product/2/640_640_70/3e85e4e2a5f7f2c4aa83bcc82e7f3449_f004042_m_1_1.jpg);
+		background-size: cover;
+		padding: 10px;
+		text-align: center;
+		position: fixed;
+		bottom: 0;
+		width: 100%;
+	}
+    </style>
+    <script>
+		
+		
+function SauvegardeExperience() {
+    const storedExperiences = localStorage.getItem("experiences");
+    return storedExperiences ? JSON.parse(storedExperiences) : [];
+}
+
+function distanceTotale() {
+    const experiences = SauvegardeExperience();
+    const totalDistance = experiences.reduce((sum, experience) => sum + parseInt(experience.kmParcouru), 0);
+    return totalDistance+ " km";
+    
+}
+
+
+
+function statsMeteo() {
+    const experiences = SauvegardeExperience();
+    const stats = {};
+
+    experiences.forEach(experience => {
+        stats[experience.meteo] = (stats[experience.meteo] || 0) + 1;
+    });
+
+    const statsTable = document.getElementById("statsTable");
+    Object.entries(stats).forEach(([variable, count]) => {
+        const row = statsTable.insertRow(-1);
+        const cell1 = row.insertCell(0);
+        const cell2 = row.insertCell(1);
+        cell1.textContent = variable;
+        cell2.textContent = count;
+    });
+}
+
+
+function afficherResume() {
+    const bilanContainer = document.getElementById('bilan-container');
+    const experiences = SauvegardeExperience();
+
+    experiences.forEach((experience, index) => {
+        const experienceElement = document.createElement('div');
+        experienceElement.innerHTML = `
+			<hr> 
+            <h3>Expérience #${index + 1}</h3>
+            <p>Date: ${experience.date}</p>
+            <p>Heure de Début: ${experience.heureDebut}</p>
+            <p>Heure de Fin: ${experience.heureFin}</p>
+            <p>Température (°C): ${experience.temperature}</p>
+            <p>Météo: ${experience.meteo}</p>
+            <p>Traffic: ${experience.traffic}</p>
+            <p>Permis: ${experience.permis}</p>
+            <p>Kilométrage parcouru: ${experience.kmParcouru} km</p>
+            <p>Trafic: ${experience.traffic}</p>
+            <hr>
+        `;
+        bilanContainer.appendChild(experienceElement);
+    });
+}
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const totalDistanceElement = document.getElementById("totalDistance");
+    totalDistanceElement.textContent = distanceTotale();
+
+    statsMeteo();
+    afficherResume();
+});
+ 
+        
+   
+    </script>
+</head>
+
+<body>
+    <header>
+        <h1>Bilan des expériences de conduite</h1>
+    </header>
+
+    <main>
+     
+        
+        <h2>Total Distance Parcourue</h2>
+        <p id="totalDistance"></p>
+
+        <h2>Statistiques par Variable</h2>
+        <table id="statsTable">
+            <tr>
+                <th>Variable</th>
+                <th>Nombre d'expériences</th>
+            </tr>
+            
+             
+        </table>
+        <div id="bilan-container"></div>
+    </main>
+
+    <footer>
+        <p> Unver Uzeyir. Tous droits réservés.</p>
+    </footer>
+</body>
+
+</html>
+
